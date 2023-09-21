@@ -1,6 +1,5 @@
 package com.guilherme.vestidobank.vestidobank.model;
 
-import com.guilherme.vestidobank.vestidobank.Enumeration.TransactionStatus;
 import com.guilherme.vestidobank.vestidobank.Enumeration.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,11 +21,12 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
+    @Column(name = "descricao")
+    private String descricao;
 
     @ManyToOne
     @JoinColumn(name = "usuario")
-    private User destinatario;
+    private User usuario;
 
     @Column(name = "valor")
     private Double valor;
@@ -38,9 +38,5 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType tipo;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TransactionStatus status;
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class UserController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class UserController {
         return repository.findAll();
     }
 
-    @GetMapping("/usuarios/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserByID(@PathVariable(value = "id") Long userId)
             throws ResourceNotFoundException {
         User user = repository.findById(userId).orElseThrow(()->
@@ -33,12 +33,20 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping("/usuarios")
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable(value = "email") String userEmail)
+        throws ResourceNotFoundException{
+        User user = repository.findByEmail(userEmail);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping("/usuarios/create")
     public User createUser(@Validated @RequestBody User user){
         return repository.save(user);
     }
 
-    @PutMapping("/usuarios/{id}")
+
+    @PutMapping("/usuarios/edit/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
                                            @Validated @RequestBody User detalhes)
             throws ResourceNotFoundException{
@@ -49,12 +57,12 @@ public class UserController {
         user.setSobrenome(detalhes.getSobrenome());
         user.setNome(detalhes.getNome());
         user.setSenha(detalhes.getSenha());
-        user.setSaldo(detalhes.getSaldo());
+        user.setConta(detalhes.getConta());
         final User updatedUser = repository.save(user);
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/usuarios/{id}")
+    @DeleteMapping("/usuarios/delete/{id}")
     public Map<String, Boolean> deleteUser(
             @PathVariable(value = "id") Long userId
     ) throws Exception{

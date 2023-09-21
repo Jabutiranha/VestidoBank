@@ -1,6 +1,8 @@
 package com.guilherme.vestidobank.vestidobank.service;
 
+import com.guilherme.vestidobank.vestidobank.model.Account;
 import com.guilherme.vestidobank.vestidobank.model.User;
+import com.guilherme.vestidobank.vestidobank.repository.AccountRepository;
 import com.guilherme.vestidobank.vestidobank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     private UserRepository repository;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private PasswordEncoder bcryptEncoder;
 
     @Override
@@ -33,12 +38,17 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public User save(User user){
+        Account account = new Account();
+        account.setSaldo(0.00);
+        accountRepository.save(account);
+
         User novo = new User();
         novo.setNome(user.getNome());
         novo.setSobrenome(user.getSobrenome());
         novo.setEmail(user.getEmail());
         novo.setUsername(user.getUsername());
         novo.setSenha(bcryptEncoder.encode(user.getSenha()));
+        novo.setConta(user.getConta());
 
         return repository.save(novo);
     }

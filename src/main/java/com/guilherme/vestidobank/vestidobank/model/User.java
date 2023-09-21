@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -31,19 +30,20 @@ public class User {
     @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "senha", nullable = false, length = 100)
     private String senha;
 
-    @OneToMany(mappedBy = "destinatario",
+    @OneToMany(mappedBy = "usuario",
             targetEntity = Transaction.class,
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Transaction> transacoes;
 
-    @Column(name = "saldo")
-    private BigDecimal saldo;
+    @OneToOne
+    @JoinColumn(name = "conta")
+    private Account conta;
 }
