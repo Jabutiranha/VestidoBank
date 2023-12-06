@@ -4,7 +4,7 @@ services:
 
   app:
     build: 
-      context: ../../OneDrive/Desktop
+      context: .
     container_name: vestidoBankk
     environment:
       - spring.datasource.url=jdbc:mysql://db:3306/pg3_vestidobank?useTimezone=true&serverTimezone=UTC
